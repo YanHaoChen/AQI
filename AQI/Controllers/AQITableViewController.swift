@@ -8,26 +8,49 @@
 
 import UIKit
 import RealmSwift
+import SwiftSoup
 
 class AQITableViewController: UITableViewController {
 
-    var sites = ["台北","台中","高雄"]
-    var aqi = ["123","23","23"]
-    var status = ["普通","普通","普通"]
     let realm = try! Realm()
     
     @IBOutlet weak var headerViewLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let newAQI = AQIData()
-        newAQI.site = "高雄"
-        newAQI.aqi = 222
-        newAQI.status = "普通"
-        
 
-    headerViewLabel.text = "我看過滿足如何讓人失去警覺，然後犯錯和失去機會。"
-
+        getAQIFromAPI { (AQIResults) in
+            print(AQIResults.count)
+            if AQIResults.count > 0{
+                for AQIResult in AQIResults {
+                    let newAQI = AQIData()
+                    newAQI.site = AQIResult["SiteName"] as! String
+                    newAQI.aqi = Double(AQIResult["AQI"] as! String) as! Double
+                    newAQI.status = AQIResult["Status"] as! String
+                    try! self.realm.write {
+                        self.realm.add(newAQI)
+                    }
+                }
+            } else {
+              print("can't get data")
+            }
+            let AQIs = self.realm.objects(AQIData.self)
+            print(AQIs.count)
+            self.tableView.reloadData()
+        }
+        getDailyQuote { (htmlBody) in
+            do {
+                let html: String = htmlBody
+                let doc: Document = try SwiftSoup.parse(html)
+                let quote: Element = try doc.select("article").get(1)
+                let quoteText: String = try quote.text()
+                self.headerViewLabel.text = quoteText
+            } catch Exception.Error(let type, let message) {
+                print(message)
+            } catch {
+                print("error")
+            }
+        }
     }
 
     // MARK: - Table view data source
@@ -39,7 +62,8 @@ class AQITableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return sites.count
+        let AQIs = realm.objects(AQIData.self)
+        return AQIs.count
         
     }
 
@@ -53,7 +77,6 @@ class AQITableViewController: UITableViewController {
         cell.siteName.text = AQIs[indexPath.row].site
         cell.AQIValue.text = String(describing: AQIs[indexPath.row].aqi)
         cell.statusValue.text = AQIs[indexPath.row].status
-        // Configure the cell...
 
         return cell
     }
@@ -71,9 +94,10 @@ class AQITableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-            sites.remove(at: indexPath.row)
-            aqi.remove(at: indexPath.row)
-            status.remove(at: indexPath.row)
+            let AQIs = realm.objects(AQIData.self)
+            try! self.realm.write {
+                self.realm.delete(AQIs[indexPath.row])
+            }
             self.tableView.beginUpdates()
             self.tableView.deleteRows(at: [indexPath], with: .automatic)
             self.tableView.endUpdates()

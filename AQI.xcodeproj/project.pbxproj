@@ -15,6 +15,7 @@
 		142B2B8A2282AE9100576450 /* AQITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142B2B892282AE9100576450 /* AQITableViewCell.swift */; };
 		142B2B8C2282B3F300576450 /* AQITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142B2B8B2282B3F300576450 /* AQITableViewController.swift */; };
 		142B2B8F2282C15A00576450 /* AQI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142B2B8E2282C15A00576450 /* AQI.swift */; };
+		142B2B952282D0F400576450 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142B2B942282D0F400576450 /* NetworkManager.swift */; };
 		EF7A687C70529EE8BA2A7653 /* Pods_AQI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B622283EB502EC488AF0AC44 /* Pods_AQI.framework */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,7 @@
 		142B2B8B2282B3F300576450 /* AQITableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AQITableViewController.swift; sourceTree = "<group>"; };
 		142B2B8E2282C15A00576450 /* AQI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AQI.swift; sourceTree = "<group>"; };
 		142B2B932282CEC200576450 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		142B2B942282D0F400576450 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		7AC31F87D589887498DEE302 /* Pods-AQI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AQI.debug.xcconfig"; path = "Target Support Files/Pods-AQI/Pods-AQI.debug.xcconfig"; sourceTree = "<group>"; };
 		B622283EB502EC488AF0AC44 /* Pods_AQI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AQI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA8A26D01FF21669887E0B01 /* Pods-AQI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AQI.release.xcconfig"; path = "Target Support Files/Pods-AQI/Pods-AQI.release.xcconfig"; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 		142B2B922282C96500576450 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				142B2B942282D0F400576450 /* NetworkManager.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftSoup/SwiftSoup.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
@@ -279,6 +283,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSoup.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -316,6 +321,7 @@
 			files = (
 				142B2B8C2282B3F300576450 /* AQITableViewController.swift in Sources */,
 				142B2B8A2282AE9100576450 /* AQITableViewCell.swift in Sources */,
+				142B2B952282D0F400576450 /* NetworkManager.swift in Sources */,
 				142B2B8F2282C15A00576450 /* AQI.swift in Sources */,
 				142B2B682282A13A00576450 /* AppDelegate.swift in Sources */,
 			);
