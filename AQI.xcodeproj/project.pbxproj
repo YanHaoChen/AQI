@@ -41,6 +41,7 @@
 		142B2B892282AE9100576450 /* AQITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AQITableViewCell.swift; sourceTree = "<group>"; };
 		142B2B8B2282B3F300576450 /* AQITableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AQITableViewController.swift; sourceTree = "<group>"; };
 		142B2B8E2282C15A00576450 /* AQI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AQI.swift; sourceTree = "<group>"; };
+		142B2B932282CEC200576450 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7AC31F87D589887498DEE302 /* Pods-AQI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AQI.debug.xcconfig"; path = "Target Support Files/Pods-AQI/Pods-AQI.debug.xcconfig"; sourceTree = "<group>"; };
 		B622283EB502EC488AF0AC44 /* Pods_AQI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AQI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA8A26D01FF21669887E0B01 /* Pods-AQI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AQI.release.xcconfig"; path = "Target Support Files/Pods-AQI/Pods-AQI.release.xcconfig"; sourceTree = "<group>"; };
@@ -77,6 +78,7 @@
 		142B2B5B2282A13A00576450 = {
 			isa = PBXGroup;
 			children = (
+				142B2B932282CEC200576450 /* README.md */,
 				142B2B662282A13A00576450 /* AQI */,
 				142B2B7B2282A13C00576450 /* AQITests */,
 				142B2B652282A13A00576450 /* Products */,
