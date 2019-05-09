@@ -11,17 +11,19 @@ import Foundation
 
 
 class HttpClient {
-    typealias completeClosure = ( _ data: Data?, _ error: Error?)->Void
+    typealias completeClosure = ( _ data: Data? , _  response: URLResponse?, _ error: Error?)->Void
     private let session: URLSession
     init(session: URLSession = URLSession.shared) {
+
         self.session = session
     }
     func get( url: URL, callback: @escaping completeClosure ) {
-        let request = NSMutableURLRequest(url: url)
+        var request = URLRequest(url: url)
+        
         request.httpMethod = "GET"
-        let task = session.dataTask(with: url) { (data, _, error) in
-            
-            callback(data, error)
+        request.addValue("https://tw.appledaily.com/recommend/realtime/", forHTTPHeaderField: "Referer")
+        let task = self.session.dataTask(with: request) { (data, response, error) in
+            callback(data, response, error)
         }
         task.resume()
     }

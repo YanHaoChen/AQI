@@ -13,7 +13,7 @@ import SwiftSoup
 class AQITableViewController: UITableViewController {
     let AQITop3: String = "https://opendata.epa.gov.tw/webapi/Data/REWIQA/?$orderby=SiteName&$skip=0&$top=3&format=json"
     
-    let DailyQuote: String = "https://tw.appledaily.com/index/dailyquote/"
+    let DailyQuote: String = "https://tw.appledaily.com/index/dailyquote"
     let realm = try! Realm()
     
     @IBOutlet weak var headerViewLabel: UILabel!
@@ -22,25 +22,32 @@ class AQITableViewController: UITableViewController {
         super.viewDidLoad()
 
         
-        getAQIFromAPI { (AQIResults) in
-            print(AQIResults.count)
-            if AQIResults.count > 0{
-                for AQIResult in AQIResults {
-                    let newAQI = AQIData()
-                    newAQI.site = AQIResult["SiteName"] as! String
-                    newAQI.aqi = Double(AQIResult["AQI"] as! String) as! Double
-                    newAQI.status = AQIResult["Status"] as! String
-                    try! self.realm.write {
-                        self.realm.add(newAQI)
-                    }
-                }
-            } else {
-                print("can't get data")
-            }
-            let AQIs = self.realm.objects(AQIData.self)
-            print(AQIs.count)
-            self.tableView.reloadData()
+//        getAQIFromAPI { (AQIResults) in
+//            print(AQIResults.count)
+//            if AQIResults.count > 0{
+//                for AQIResult in AQIResults {
+//                    let newAQI = AQIData()
+//                    newAQI.site = AQIResult["SiteName"] as! String
+//                    newAQI.aqi = Double(AQIResult["AQI"] as! String) as! Double
+//                    newAQI.status = AQIResult["Status"] as! String
+//                    try! self.realm.write {
+//                        self.realm.add(newAQI)
+//                    }
+//                }
+//            } else {
+//                print("can't get data")
+//            }
+//            let AQIs = self.realm.objects(AQIData.self)
+//            print(AQIs.count)
+//            self.tableView.reloadData()
+//        }
+        
+       let dailyQuoteUrl = URL(string: DailyQuote)
+        
+        HttpClient().get(url: dailyQuoteUrl!) { (data, response, error) in
+            print(String(data: data!, encoding: .utf8))
         }
+        
         getDailyQuote { (htmlBody) in
             do {
                 let html: String = htmlBody
