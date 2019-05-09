@@ -15,9 +15,9 @@ let DailyQuote: String = "https://tw.appledaily.com/index/dailyquote/"
 
 
 
-func getAQIFromAPI(complete: @escaping (Array<Dictionary<String,String>>) -> ()){
+func httpGetJson(urlString: String, complete: @escaping (Array<Dictionary<String,String>>) -> ()){
     
-    Alamofire.request(AQITop3)
+    Alamofire.request(urlString)
         .responseJSON { response in
             // check for errors
             guard response.result.error == nil else {
@@ -37,7 +37,7 @@ func getAQIFromAPI(complete: @escaping (Array<Dictionary<String,String>>) -> ())
     }
 }
 
-func getDailyQuote(complete: @escaping (String) -> ()){
+func HttpGetHtml(urlString: String, complete: @escaping (String) -> ()){
     
     Alamofire.request(DailyQuote)
         .responseString { response in

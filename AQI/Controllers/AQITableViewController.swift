@@ -21,9 +21,7 @@ class AQITableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
-        getAQIFromAPI { (AQIResults) in
-            print(AQIResults.count)
+        httpGetJson(urlString: AQITop3) { (AQIResults) in
             if AQIResults.count > 0{
                 for AQIResult in AQIResults {
                     let newAQI = AQIData()
@@ -38,10 +36,10 @@ class AQITableViewController: UITableViewController {
                 print("can't get data")
             }
             let AQIs = self.realm.objects(AQIData.self)
-            print(AQIs.count)
             self.tableView.reloadData()
         }
-        getDailyQuote { (htmlBody) in
+
+        HttpGetHtml(urlString: DailyQuote) { (htmlBody) in
             do {
                 let html: String = htmlBody
                 let doc: Document = try SwiftSoup.parse(html)
