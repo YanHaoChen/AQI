@@ -14,6 +14,7 @@ let AQITop3: String = "https://opendata.epa.gov.tw/webapi/Data/REWIQA/?$orderby=
 let DailyQuote: String = "https://tw.appledaily.com/index/dailyquote/"
 
 
+
 func getAQIFromAPI(complete: @escaping (Array<Dictionary<String,String>>) -> ()){
     
     Alamofire.request(AQITop3)

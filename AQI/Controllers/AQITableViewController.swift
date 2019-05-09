@@ -11,7 +11,9 @@ import RealmSwift
 import SwiftSoup
 
 class AQITableViewController: UITableViewController {
-
+    let AQITop3: String = "https://opendata.epa.gov.tw/webapi/Data/REWIQA/?$orderby=SiteName&$skip=0&$top=3&format=json"
+    
+    let DailyQuote: String = "https://tw.appledaily.com/index/dailyquote/"
     let realm = try! Realm()
     
     @IBOutlet weak var headerViewLabel: UILabel!
@@ -19,6 +21,7 @@ class AQITableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
         getAQIFromAPI { (AQIResults) in
             print(AQIResults.count)
             if AQIResults.count > 0{
@@ -32,7 +35,7 @@ class AQITableViewController: UITableViewController {
                     }
                 }
             } else {
-              print("can't get data")
+                print("can't get data")
             }
             let AQIs = self.realm.objects(AQIData.self)
             print(AQIs.count)
