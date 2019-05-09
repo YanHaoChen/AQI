@@ -29,6 +29,39 @@ class HttpClient {
     }
 }
 
+func requestWithURL(urlString: String, parameters: [String: Any], completion: @escaping (Data) -> Void){
+    
+    var urlComponents = URLComponents(string: urlString)!
+    urlComponents.queryItems = []
+    
+    for (key, value) in parameters{
+        guard let value = value as? String else{return}
+        urlComponents.queryItems?.append(URLQueryItem(name: key, value: value))
+    }
+    
+    guard let queryedURL = urlComponents.url else{return}
+    
+    let request = URLRequest(url: queryedURL)
+    
+    fetchedDataByDataTask(from: request, completion: completion)
+}
+
+func fetchedDataByDataTask(from request: URLRequest, completion: @escaping (Data) -> Void){
+    
+    let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        
+        if error != nil{
+            print(error as Any)
+        }else{
+            guard let data = data else{return}
+            completion(data)
+        }
+    }
+    task.resume()
+}
+
+
+
 func jsonArrayParser(data: Data?) -> [Dictionary<String,Any>] {
     do {
         if let jsonArray = try JSONSerialization.jsonObject(with: data!, options : .allowFragments) as? [Dictionary<String,Any>]

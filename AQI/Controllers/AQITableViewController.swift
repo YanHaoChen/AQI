@@ -44,8 +44,8 @@ class AQITableViewController: UITableViewController {
         
        let dailyQuoteUrl = URL(string: DailyQuote)
         
-        HttpClient().get(url: dailyQuoteUrl!) { (data, response, error) in
-            print(String(data: data!, encoding: .utf8))
+        requestWithURL(urlString: DailyQuote, parameters: [String: Any]()) { (data) in
+            print(data)
         }
         
         getDailyQuote { (htmlBody) in
