@@ -52,15 +52,21 @@ class AQITests: XCTestCase {
     // Desc: The result is in expectation or not.
     func test_get_top_10_AQI(){
         let AQITop10: String = "https://opendata.epa.gov.tw/webapi/Data/REWIQA/?$orderby=SiteName&$skip=0&$top=10&format=json"
-        
         httpClient = HttpClient(session: session)
         guard let url = URL(string: AQITop10) else {
             fatalError("URL can't be empty")
         }
+        
+        let urlExpectation = expectation(description: "GET \(AQITop10)")
+        
         httpClient.get(url: url) { (data, response, error) in
             let jsonArray = dataToJsonArray(data: data!)
+            print("\(jsonArray)")
             XCTAssert(jsonArray.count == 10)
+            urlExpectation.fulfill()
         }
+        waitForExpectations(timeout: 10, handler: nil)
+        
     }
     // Testing Network/HttpClient/get
     // Func: The url we input is in expectation or not.

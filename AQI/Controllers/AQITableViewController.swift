@@ -14,7 +14,6 @@ class AQITableViewController: UITableViewController {
     let AQITop3: String = "https://opendata.epa.gov.tw/webapi/Data/REWIQA/?$orderby=SiteName&$skip=0&$top=3&format=json"
     
     let dailyQuote: String = "https://tw.appledaily.com/index/dailyquote"
-    let realm = try! Realm()
     
     @IBOutlet weak var headerViewLabel: UILabel!
     
@@ -25,8 +24,10 @@ class AQITableViewController: UITableViewController {
         // Get TOP3 AQI
         let httpClent = HttpClient(session: URLSession(configuration: URLSessionConfiguration.default))
         let AQITop3Url = URL(string: AQITop3)
+        
         httpClent.get(url: AQITop3Url!) { (data, response, error) in
             if data != nil {
+                let realm = try! Realm()
                 let top3AQIJson = dataToJsonArray(data: data!)
                 // Store data into local database
                 for AQIResult in top3AQIJson {
@@ -34,15 +35,14 @@ class AQITableViewController: UITableViewController {
                     newAQI.site = AQIResult["SiteName"] as! String
                     newAQI.aqi = Double(AQIResult["AQI"] as! String) ?? 0.0
                     newAQI.status = AQIResult["Status"] as! String
-                    try! self.realm.write {
-                        self.realm.add(newAQI)
+                    try! realm.write {
+                        realm.add(newAQI)
                     }
                 }
                 // Reflash table
-                let AQIs = self.realm.objects(AQIData.self)
-                print(AQIs.count)
-                self.tableView.reloadData()
-
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
         }
         
@@ -79,6 +79,7 @@ class AQITableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
+        let realm = try! Realm()
         let AQIs = realm.objects(AQIData.self)
         return AQIs.count
         
@@ -90,6 +91,7 @@ class AQITableViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? AQITableViewCell else {
             fatalError("The dequeued cell is not an instance of AQITableViewCell.")
         }
+        let realm = try! Realm()
         let AQIs = realm.objects(AQIData.self)
         cell.siteName.text = AQIs[indexPath.row].site
         cell.AQIValue.text = String(describing: AQIs[indexPath.row].aqi)
@@ -111,9 +113,10 @@ class AQITableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
+            let realm = try! Realm()
             let AQIs = realm.objects(AQIData.self)
-            try! self.realm.write {
-                self.realm.delete(AQIs[indexPath.row])
+            try! realm.write {
+                realm.delete(AQIs[indexPath.row])
             }
             self.tableView.beginUpdates()
             self.tableView.deleteRows(at: [indexPath], with: .automatic)
