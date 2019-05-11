@@ -20,12 +20,15 @@ class AQITableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let httpClent = HttpClient(session: URLSession(configuration: URLSessionConfiguration.default))
         
+        
+        // Get TOP3 AQI
+        let httpClent = HttpClient(session: URLSession(configuration: URLSessionConfiguration.default))
         let AQITop3Url = URL(string: AQITop3)
         httpClent.get(url: AQITop3Url!) { (data, response, error) in
             if data != nil {
                 let top3AQIJson = dataToJsonArray(data: data!)
+                // Store data into local database
                 for AQIResult in top3AQIJson {
                     let newAQI = AQIData()
                     newAQI.site = AQIResult["SiteName"] as! String
@@ -35,6 +38,7 @@ class AQITableViewController: UITableViewController {
                         self.realm.add(newAQI)
                     }
                 }
+                // Reflash table
                 let AQIs = self.realm.objects(AQIData.self)
                 print(AQIs.count)
                 self.tableView.reloadData()
@@ -42,7 +46,9 @@ class AQITableViewController: UITableViewController {
             }
         }
         
+        // Get daily quote
         let dailyQuoteUrl = URL(string: dailyQuote)
+        // Set fake agent
         let fadeAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36"
         let headers = ["User-Agent":fadeAgent]
 
@@ -52,6 +58,7 @@ class AQITableViewController: UITableViewController {
                 let doc: Document = try SwiftSoup.parse(htmlbody)
                 let quote: Element = try doc.select("article").get(1)
                 let quoteText: String = try quote.text()
+                // Reflash view with main thread
                 DispatchQueue.main.async {
                     self.headerViewLabel.text = quoteText
                 }

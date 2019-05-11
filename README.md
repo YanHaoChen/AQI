@@ -15,11 +15,12 @@
 
 #### 資料存儲
 
-* 使用 RealmSwift: 將資料寫入 local 端。
+* 使用 RealmSwift：將資料寫入 local 端。
 
 #### 資料抓取
 
-* 使用 URLSession: 送出HTTP GET，取得空氣品質資訊及每日一句。
+* 使用 URLSession：送出HTTP GET，取得空氣品質資訊及每日一句。
+* 使用 SwiftSoup：解析 html。
 
 > 再取得每日一句時，如沒有將 Header 的 User-Agent 設為電腦版的設定，Server 則會自動將此請求轉址，因此無法獲得預期的網頁。結果如下：
 >
