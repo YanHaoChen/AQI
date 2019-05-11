@@ -11,33 +11,27 @@ import Foundation
 
 
 class HttpClient {
-    typealias completeClosure = ( _ data: Data?, _ error: Error?)->Void
-    private let session: URLSession
-    init(session: URLSession = URLSession.shared) {
-        self.session = session
+    typealias completeClosure = ( _ data: Data? , _  response: URLResponse?, _ error: Error?)->Void
+    private let session: URLSessionProtocol
+    init(session: URLSessionProtocol) {
+        self.session = session 
     }
-    func get( url: URL, callback: @escaping completeClosure ) {
-        let request = NSMutableURLRequest(url: url)
+    func get( url: URL, headers: [String: String] = [String: String](), callback: @escaping completeClosure ) {
+        var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        let task = session.dataTask(with: url) { (data, _, error) in
-            
-            callback(data, error)
+        if !headers.isEmpty {
+            for (key, value) in headers {
+                request.setValue(value, forHTTPHeaderField: key)
+            }
+        }
+
+        let task = self.session.dataTask(with: request) { (data, response, error) in
+            callback(data, response, error)
         }
         task.resume()
     }
 }
 
-func jsonArrayParser(data: Data?) -> [Dictionary<String,Any>] {
-    do {
-        if let jsonArray = try JSONSerialization.jsonObject(with: data!, options : .allowFragments) as? [Dictionary<String,Any>]
-        {
-            return jsonArray
-        } else {
-            print("bad json")
-            return [Dictionary<String,Any>]()
-        }
-    } catch let error as NSError {
-        print(error)
-        return [Dictionary<String,Any>]()
-    }
-}
+
+
+

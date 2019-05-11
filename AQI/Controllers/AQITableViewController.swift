@@ -13,41 +13,50 @@ import SwiftSoup
 class AQITableViewController: UITableViewController {
     let AQITop3: String = "https://opendata.epa.gov.tw/webapi/Data/REWIQA/?$orderby=SiteName&$skip=0&$top=3&format=json"
     
-    let DailyQuote: String = "https://tw.appledaily.com/index/dailyquote/"
+    let dailyQuote: String = "https://tw.appledaily.com/index/dailyquote"
     let realm = try! Realm()
     
     @IBOutlet weak var headerViewLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        httpGetJson(urlString: AQITop3) { (AQIResults) in
-            if AQIResults.count > 0{
-                for AQIResult in AQIResults {
+        let httpClent = HttpClient(session: URLSession(configuration: URLSessionConfiguration.default))
+        
+        let AQITop3Url = URL(string: AQITop3)
+        httpClent.get(url: AQITop3Url!) { (data, response, error) in
+            if data != nil {
+                let top3AQIJson = dataToJsonArray(data: data!)
+                for AQIResult in top3AQIJson {
                     let newAQI = AQIData()
                     newAQI.site = AQIResult["SiteName"] as! String
-                    newAQI.aqi = Double(AQIResult["AQI"] as! String) as! Double
+                    newAQI.aqi = Double(AQIResult["AQI"] as! String) ?? 0.0
                     newAQI.status = AQIResult["Status"] as! String
                     try! self.realm.write {
                         self.realm.add(newAQI)
                     }
                 }
-            } else {
-                print("can't get data")
-            }
-            let AQIs = self.realm.objects(AQIData.self)
-            self.tableView.reloadData()
-        }
+                let AQIs = self.realm.objects(AQIData.self)
+                print(AQIs.count)
+                self.tableView.reloadData()
 
-        HttpGetHtml(urlString: DailyQuote) { (htmlBody) in
+            }
+        }
+        
+        let dailyQuoteUrl = URL(string: dailyQuote)
+        let fadeAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36"
+        let headers = ["User-Agent":fadeAgent]
+
+        httpClent.get(url: dailyQuoteUrl!, headers: headers) { (data, response, error) in
+            let htmlbody = dataToString(data: data)
             do {
-                let html: String = htmlBody
-                let doc: Document = try SwiftSoup.parse(html)
+                let doc: Document = try SwiftSoup.parse(htmlbody)
                 let quote: Element = try doc.select("article").get(1)
                 let quoteText: String = try quote.text()
-                self.headerViewLabel.text = quoteText
+                DispatchQueue.main.async {
+                    self.headerViewLabel.text = quoteText
+                }
             } catch Exception.Error(let type, let message) {
-                print(message)
+                print("type:\(type), massage:\(message)")
             } catch {
                 print("error")
             }
