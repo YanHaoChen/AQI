@@ -22,7 +22,7 @@
 * 使用 URLSession：送出HTTP GET，取得空氣品質資訊及每日一句。
 * 使用 SwiftSoup：解析 html。
 
-> 再取得每日一句時，如沒有將 Header 的 User-Agent 設為電腦版的設定，Server 則會自動將此請求轉址，因此無法獲得預期的網頁。結果如下：
+> 在取得每日一句時，如沒有將 Header 的 User-Agent 設為電腦版的設定，Server 則會自動將此請求轉址，因此無法獲得預期的網頁。結果如下：
 >
 > ```javascript
 > <script>window.location.href="/recommend/realtime/"</script>
@@ -30,7 +30,7 @@
 >
 > 從 Response 則可看出一些端倪(stop_mobi)：
 >
-> ```json
+> ```txt
 > {
 >     "Content-Encoding" =     (
 >         gzip
@@ -73,7 +73,7 @@
 >
 > [Apple Developer - Start Developing iOS Apps (Swift)](https://developer.apple.com/library/archive/referencelibrary/GettingStarted/DevelopiOSAppsSwift/CreateATableView.html#//apple_ref/doc/uid/TP40015214-CH8-SW1)
 >
-> [urlsession-tutorial-getting-starte])(https://www.raywenderlich.com/567-urlsession-tutorial-getting-started)
+> [urlsession-tutorial-getting-starte](https://www.raywenderlich.com/567-urlsession-tutorial-getting-started)
 >
 > [NetworkingUintTest](https://github.com/koromiko/Tutorial/tree/master/NetworkingUnitTest.playground)
 >
